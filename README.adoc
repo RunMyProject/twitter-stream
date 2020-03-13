@@ -1,0 +1,254 @@
+
+:spring_version: current
+:toc:
+:project_id: twitter-stream
+:icons: font
+:source-highlighter: prettify
+
+== Welcome to TWITTER-STREAM!
+
+Description of the project: test that connects to Twitter API Stream,
+then sorts them by creation date and grouped by User.
+
+== What you'll build
+
+https://docker.com[Docker] is a Linux container management toolkit with a "social" aspect, allowing users to publish container images and consume those published by others.
+ A Docker image is a recipe for running a containerized process, and in this guide we will build one for a simple batch Java Application.
+
+== What you'll need
+
+* about 15 minutes
+* jdk: Oracle or Alpine version 1.8 or later
+* [IntelliJ IDEA] https://spring.io/guides/gs/intellij-idea/
+or a favourite text editor or IDE
+* [Apache Maven 3.2+] http://maven.apache.org/download.cgi
+
+You can also import the code straight into your IDE
+
+[[initial]]
+== Set up a Java App
+
+If you want to run with Maven, execute:
+
+[subs="attributes"]
+----
+./mvn package && java -jar target/twitter-stream-0.0.1-SNAPSHOT.jar
+----
+
+and you can see the help command line of this application:
+
+----
+Proper Usage is: java -jar target/twitter-stream-0.0.1-SNAPSHOT.jar <any argument>
+If you are in Docker image: java -jar twitter-stream.jar <any argument>
+----
+
+== Containerize It
+
+If you want to run with Docker, execute the follows command lines:
+
+[subs="attributes"]
+----
+./docker build -t twitter-stream .
+----
+
+at the finish, now run the command:
+
+----
+./docker images
+----
+
+to check the new images in your local repository:
+
+----
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+twitter-stream       latest              5130b553fe6c        4 seconds ago       110MB
+openjdk             8-jdk-alpine        a3562aa0b991        10 months ago       105MB
+----
+
+now you have to tag and insert your repository
+after login in Docker Hub.
+
+In this example our repository will be called "runmydocker" in ours Docker Hub website:
+
+----
+./docker login
+----
+
+you can see:
+
+----
+Authenticating with existing credentials...
+....
+....
+Login Succeeded
+----
+
+now you can tag your new Docker image before to push that:
+
+----
+./docker tag twitter-stream runmydocker/twitter-stream:latest
+----
+
+next you can check the Docker images following the command:
+
+----
+./docker images
+----
+
+and you can see:
+
+----
+REPOSITORY                  TAG                 IMAGE ID            CREATED             SIZE
+twitter-stream               latest              a04d6256cbda        7 minutes ago       110MB
+runmydocker/twitter-stream   latest              a04d6256cbda        7 minutes ago       110MB
+openjdk                     8-jdk-alpine        a3562aa0b991        10 months ago       105MB
+----
+
+next, you can push your new Docker image wich the command line:
+
+----
+./docker push runmydocker/twitter-stream:latest
+----
+
+you can see a similar screen:
+
+----
+f24f0a3c74bd: Pushed                                                                                                                           
+ceaf9e1ebef5: Layer already exists
+9b9b7f3d56a0: Layer already exists
+f1b5933fe4b5: Layer already exists                                                                                                             
+latest: digest: sha256:ada757608e9f971437e6ce35cc291078de1b730d99de16dfcb40511ff8336cc4 size: 1158
+----
+
+Finally, you can enter your new Docker image! :-)
+Execute this command line:
+----
+docker run -it runmydocker/twitter-stream
+----
+
+and now we are in the Docker shell:
+
+----
+/ #
+----
+
+to check your release, please execute the ls command:
+
+----
+/ # ls
+bin                home               media              proc               sbin               tmp
+dev                twitter-stream.jar  mnt                root               srv                usr
+etc                lib                opt                run                sys                var
+----
+
+and if you see the twitter-stream.jar file you can execute the command line
+to start your Twitter Stream Application:
+
+----
+# java -jar twitter-stream.jar START
+----
+
+you have to see a screen like:
+
+----
+twitter-stream v. 1.0
+Aquired temporary token...
+
+Go to the following link in your browser:
+https://api.twitter.com/oauth/authorize?oauth_token=shq4OwAAAAAAt7ElAAABcNQSPlA
+
+Please enter the retrieved PIN:
+----
+
+to get the PIN, go to the suggested link via your favorite browser
+using the combination of cut and paste keys:
+
+----
+https://api.twitter.com/oauth/authorize?oauth_token=shq4OwAAAAAAt7ElAAABcNQSPlA
+----
+
+and authorize the Twitter Application. You can see a screen with the code.
+Cut it and copy into your Docker shell:
+
+----
+You've granted access to twitter-stream!
+....
+1979478
+----
+
+next press ENTER key:
+
+-----
+/ # java -jar twitter-stream.jar START
+twitter-stream v. 1.0
+Aquired temporary token...
+
+Go to the following link in your browser:
+https://api.twitter.com/oauth/authorize?oauth_token=shq4OwAAAAAAt7ElAAABcNQSPlA
+
+Please enter the retrieved PIN:
+1979478
+
+Authorization was successful
+-----
+
+Congratulations! you just successfully ran the Twitter Stream test Application!
+
+-----
+Authorization was successful
+13:29:41#1#
+13:29:41#2#
+13:29:42#3#
+13:29:42#4#
+13:29:44#5#
+13:29:44#6#
+13:29:45#7#
+13:29:54#8#
+13:29:54#9#
+13:29:54#10#
+13:29:55#11#
+13:29:55#12#
+13:29:55#13#
+13:29:57#14#
+13:29:57#15#
+13:29:59#16#
+13:29:59#17#
+13:29:59#18#
+13:30:0#19#
+13:30:3#20#
+13:30:4#21#
+13:30:5#22#
+13:30:5#23#
+13:30:6#24#
+13:30:6#25#
+13:30:6#26#
+13:30:8#27#
+13:30:8#28#
+13:30:8#29#
+13:30:9#30#
+Tweets Size: 30
+13:30:9#[ id = 1238457294569889792, created_at = Fri Mar 13 13:30:03 GMT 2020, text = RT 
+..........
+]
+.....
+........
+................................
+-----
+
+put command exit to exit from the Docker shell:
+
+----
+/ # exit
+----
+ 
+== Summary
+
+Congratulations! You've just created a Docker container for a batch Java Application!
+
+Basically the batch Java Apps run on Linux shell inside the container by default and we used java -jar on the command line.
+
+== See Also
+
+The following guides may also be helpful:
+
+* https://docs.oracle.com/en/java/index.html [Executing a Java App with Shell]
