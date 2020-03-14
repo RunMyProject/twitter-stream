@@ -25,6 +25,7 @@ import com.google.api.client.http.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import mytwitter.model.MyTwitterObj;
+import oauth2twitter.Oauth2Main;
 
 public class Main {
 
@@ -98,6 +99,9 @@ public class Main {
 	public static void main(String[] args) throws TwitterAuthenticationException, IOException {
 		
 		System.out.println("java-exercise v. 1.0");
+		
+		Oauth2Main.Oauth2Demo();
+		
 		// Check how many arguments were passed in
 		//
 	    if(args.length == 0)
